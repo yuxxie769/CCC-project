@@ -1,0 +1,4 @@
+{"crime":{"Adelaide": {"num_twi":483,"unemploy_num_sa": 101, "unemploy_rate":556.4999976158142},
+  "Brisbane": {"num_twi":206,"unemploy_num_sa":227, "unemploy_rate":1181.5},
+  "Melbourne": {"num_twi":916,"unemploy_num_sa": 101, "unemploy_rate":556.4999976158142},
+  "Sydney": {"num_twi":986,"unemploy_num_sa": 204, "unemploy_rate":1213.3}}}

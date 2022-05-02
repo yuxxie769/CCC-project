@@ -1,0 +1,63 @@
+---
+- name: apt install pip3
+  become: yes
+  apt:
+    update_cache: yes
+    name: python3-pip
+
+- name: install pip dependency
+  become: yes
+  pip:
+    name: 
+      - tweepy
+      - pycouchdb
+      - couchdb
+
+- name: upload json dataset
+  become: yes
+  copy: 
+    src: '{{ item }}'
+    dest: /home/ubuntu/COMP90024_Project2/crawler/
+  loop:
+    - ../../../crawler/bitcoin_vic.json
+    - ../../../crawler/bitcoin_nsw.json
+    - ../../../crawler/bitcoin_qld.json
+    - ../../../crawler/exercise_vic.json
+    - ../../../crawler/exercise_nsw.json
+    - ../../../crawler/exercise_qld.json
+    - ../../../crawler/traffic_vic.json
+    - ../../../crawler/traffic_nsw.json
+    - ../../../crawler/traffic_qld.json
+    
+
+- name: upload processing script 
+  become: yes
+  copy: 
+    src: '{{ item }}'
+    dest: /home/ubuntu/prepocessing/
+    mode: 0777
+  loop:
+    - ../script/set_bitcoin_vic.py 
+    - ../script/set_bitcoin_nsw.py
+    - ../script/set_bitcoin_qld.py
+    - ../script/set_exercise_vic.py
+    - ../script/set_exercise_nsw.py
+    - ../script/set_exercise_qld.py
+    - ../script/set_traffic_vic.py
+    - ../script/set_traffic_nsw.py
+    - ../script/set_traffic_qld.py
+
+
+- name: setup db and its MapReduce view
+  become: yes
+  ansible.builtin.shell: '{{ item }}'
+  loop: 
+    - 'python3 /home/ubuntu/prepocessing/set_bitcoin_vic.py'
+    - 'python3 /home/ubuntu/prepocessing/set_bitcoin_nsw.py'
+    - 'python3 /home/ubuntu/prepocessing/set_exercise_vic.py'
+    - 'python3 /home/ubuntu/prepocessing/set_exercise_nsw.py'
+    - 'python3 /home/ubuntu/prepocessing/set_traffic_vic.py'
+    - 'python3 /home/ubuntu/prepocessing/set_traffic_nsw.py'
+    - 'python3 /home/ubuntu/prepocessing/set_bitcoin_qld.py'
+    - 'python3 /home/ubuntu/prepocessing/set_exercise_qld.py'
+    - 'python3 /home/ubuntu/prepocessing/set_traffic_qld.py'

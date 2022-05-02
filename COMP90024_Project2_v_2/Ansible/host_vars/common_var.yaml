@@ -1,0 +1,4 @@
+# mount point
+vol:
+  device: /dev/vdb 
+  mount: /data

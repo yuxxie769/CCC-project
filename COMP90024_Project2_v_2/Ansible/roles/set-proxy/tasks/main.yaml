@@ -1,0 +1,37 @@
+---
+# Add proxy address in /etc/environment
+- name: Add proxy address in env
+  blockinfile:
+    path: /etc/environment
+    block: |
+      HTTP_PROXY=http://wwwproxy.unimelb.edu.au:8000/
+      HTTPS_PROXY=http://wwwproxy.unimelb.edu.au:8000/
+      http_proxy=http://wwwproxy.unimelb.edu.au:8000/
+      https_proxy=http://wwwproxy.unimelb.edu.au:8000/
+      no_proxy=localhost,127.0.0.1,localaddress,172.16.0.0/12,.melbourne.rc.nectar.org.au,.storage.unimelb.edu.au,.cloud.unimelb.edu.au
+
+# Update environment variable require re-login, confirm change
+- name: confirm proxy change
+  ansible.builtin.shell: cat /etc/environment 
+  register: out
+
+- debug: 
+    msg: '{{ out.stdout }}'
+
+- name: Add proxy to docker path
+  blockinfile:
+    create: yes
+    path: /etc/systemd/system/docker.service.d/http-proxy.conf
+    block: |
+      [Service]
+      Environment="HTTP_PROXY=http://wwwproxy.unimelb.edu.au:8000/"
+      Environment="HTTPS_PROXY=http://wwwproxy.unimelb.edu.au:8000/"
+      Environment="http_proxy=http://wwwproxy.unimelb.edu.au:8000/"
+      Environment="https_proxy=http://wwwproxy.unimelb.edu.au:8000/"
+      Environment="no_proxy=localhost,127.0.0.1,localaddress,172.16.0.0/12,.melbourne.rc.nectar.org.au,.storage.unimelb.edu.au,.cloud.unimelb.edu.au"
+
+- name: restart docker daemon
+  become: yes
+  ansible.builtin.shell: |
+    systemctl daemon-reload 
+    systemctl restart docker

@@ -1,0 +1,17 @@
+---
+# Make fs, mkfs.ext4
+- name: Make filesystem on attach device
+  become: yes
+  filesystem:
+    fstype: ext4
+    dev: "{{ vol.device }}"
+
+# Mount device
+- name: Mount device
+  become: yes
+  mount:
+    path: "{{ vol.mount }}"
+    src: "{{ vol.device }}"
+    fstype: ext4
+    state: mounted
+

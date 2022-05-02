@@ -1,0 +1,45 @@
+---
+- name: upload script to ins-2
+  become: yes
+  copy:
+    src: '{{ item }}'
+    dest: /home/ubuntu/
+    mode: 0777
+  when: ansible_hostname == "ins-2"
+  loop:
+    - ../script/init-db-ins2.yml
+    - ../script/link-db.sh
+
+- name: upload script to ins-3
+  become: yes
+  copy:
+    src: ../script/init-db-ins3.yml
+    dest: /home/ubuntu/docker-compose.yml
+    mode: 0777
+  when: ansible_hostname == "ins-3"
+
+- name: upload script to ins-4
+  become: yes
+  copy:
+    src: ../script/init-db-ins4.yml
+    dest: /home/ubuntu/docker-compose.yml
+    mode: 0777
+  when: ansible_hostname == "ins-4"
+
+- name: execute script 1/2
+  become: yes
+  ansible.builtin.shell: docker-compose up -d 
+  when: (ansible_hostname == "ins-3") or (ansible_hostname == "ins-4") 
+
+- name: execute script 2/2
+  become: yes
+  ansible.builtin.shell: |
+    mv /home/ubuntu/init-db-ins2.yml /home/ubuntu/docker-compose.yml
+    docker-compose up -d 
+    /home/ubuntu/link-db.sh
+  register: out
+  when: ansible_hostname == "ins-2"
+
+- debug: 
+    msg: '{{ out.stdout }}'
+  when: ansible_hostname == "ins-2"

@@ -1,0 +1,33 @@
+---
+- name: apt install pip3
+  become: yes
+  apt:
+    update_cache: yes
+    name: 
+      - python3-pip
+      - unzip
+
+- name: install pip dependency
+  become: yes
+  pip:
+    name: 
+      - flask
+      - flask_cors
+      - pandas
+      - urllib3
+
+- name: upload zip file
+  become: yes
+  copy: 
+    src: ../../../data.zip
+    dest: /home/ubuntu/
+
+- name: unzip file and start backend & frontend
+  become: yes
+  ansible.builtin.shell: '{{ item }}'
+  loop: 
+    - 'unzip -n /home/ubuntu/data.zip'
+    - 'rm backend.log'
+    - '(nohup python3 /home/ubuntu/backend/app.py  > /home/ubuntu/backend.log 2>&1 &)'
+    - 'chmod 777 /home/ubuntu/frontend/frontend-docker/build_run_app.sh'
+    - '/home/ubuntu/frontend/frontend-docker/build_run_app.sh'

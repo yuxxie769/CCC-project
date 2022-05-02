@@ -1,0 +1,10 @@
+- hosts: dbservers
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+  vars_files:
+    - host_vars/common_var.yaml
+  gather_facts: true
+
+  roles:
+    - role: pull-couchdb
+    - role: init-db
