@@ -3,7 +3,7 @@ import json
 import requests
 
 
-masternode='172.26.134.51'
+masternode='172.26.130.224'
 user='Yingpei'
 passeord='030988'
 #files = {'file':open('crime_results.json','rb')}
@@ -51,6 +51,6 @@ for index,dbname in enumerate(dbNames):
                 dic = json.load(f)
                 #print(dic)
                 documents = db.update(dic['docs'])
-    print('export finished!')
+    print(dbname +'export finished!')
     #output=couch.delete('rant')
     #print(output)
