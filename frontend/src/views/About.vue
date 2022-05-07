@@ -9,12 +9,13 @@
 
             <ul class="mt-3">
                 <li>JingLin Li</li>
-                <li>YuXiang Xie</li>
-                <li>ZiRui Shan</li>
+                <li>YingPei Ni</li>
                 <li>YiXue Jiang</li>
-                <li>YingPei Ni</li>                
+                <li>YuXiang Xie</li>
+                <li>ZiRui Shan</li>      
             </ul>
 
+            <p>The names are in alphabetical order.</p> 
             <p>All rights reserved.</p>
             <p>Thanks</p>
         </div>
