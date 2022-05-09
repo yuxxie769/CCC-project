@@ -1,3 +1,10 @@
+<!-- Thanks COMP 90024 TEAM 68 Provide template Reference : https://github.com/CCC68/COMP90024_Project2, Hanzhen Yang 1070951, Hanzhong Wang, 1029740, Quan Zhou 1065302, Yuhang Xie 1089250, Ze Liu 1073628
+Modoified By COMP90024 TEAM 45
+Yingpei Ni 1252881
+Yixue Jiang 1023137
+Zirui Shan  1298781
+Jinglin Li 1000797
+Yuxiang Xie 1060196 -->
 <template>
   <div class="home view" id="home">
     <div class="jumbotron">
@@ -20,7 +27,7 @@ export default {
 
 <style scoped>
   #home {
-    background: url('../assets/313978.jpeg'); /* 换一张图片 */
+    background: url('../assets/Home.jpeg');
     background-size: cover;
   }
 </style>

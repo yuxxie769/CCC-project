@@ -1,25 +1,57 @@
+<!-- Thanks COMP 90024 TEAM 68 Provide template Reference : https://github.com/CCC68/COMP90024_Project2, Hanzhen Yang 1070951, Hanzhong Wang, 1029740, Quan Zhou 1065302, Yuhang Xie 1089250, Ze Liu 1073628
+Modoified By COMP90024 TEAM 45
+Yingpei Ni 1252881
+Yixue Jiang 1023137
+Zirui Shan  1298781
+Jinglin Li 1000797
+Yuxiang Xie 1060196 -->
 <template>
   <div class="views">
     <div class="container">
+      <div class="center">
+      <h4 class="mt-5">Character Selection</h4>      
+      <button @click="tabChange" data-id="1">Crime</button>
+      <button @click="tabChange" data-id="2">Income</button>
+      <button @click="tabChange" data-id="3">Disabled</button>
+      </div>
+      <div v-show="tab==1">
       <h2 class="mt-5">Crime</h2>
-      <div id="twitter_crime" style="width: 700px;height: 400px;"></div> 
-      <div id="Aruin_crime" style="width: 700px;height: 400px;"></div> 
-      <div id="Suburb" style="width: 700px;height: 400px;"></div> 
+      <p>Tweets With Crime Relate Key Words</p>
+      <div id="twitter_crime" style="width: 800px;height: 500px;"></div> 
+      <p>Aurin Population & Unemployment Data</p>
+      <div id="Aruin_crime" style="width: 800px;height: 500px;"></div> 
+      <p>Tweets With Crime Relate Key Words</p> 
+      <div id="7_news_9_news" style="width: 800px;height: 500px;"></div> 
+      <p>Emotion In Crime Related Tweets</p>
+      <div id="Emotion" style="width: 800px;height: 500px;"></div>
+      <p>Daily Crime Relate Tweets In Melbourne</p>
+      <div id="Daily_crime_tweets_Melbourne" style="width: 800px;height: 500px;"></div> 
+      <p>Total Crime Relate Tweets In 2019</p>
+      <div id="Suburb" style="width: 800px;height: 500px;"></div> 
       <hr />
+      </div>
+      <div v-show="tab==2">
+      <h2 class="mt-5">Income</h2>
+      <p>Aurin RAI Score</p>
+      <div id="rai" style="width: 800px;height: 500px;"></div> 
+      <p>Twitter 7 Day Income & Rant</p>
+      <div id="twitter_7_income_rant" style="width: 800px;height: 500px;"></div>
+      <p>Aurin Rental Households number</p>
+      <div id="rental" style="width: 800px;height: 500px;"></div>
+      <p>Aurin Jobs Condition</p>
+      <div id="Aurine_job_income" style="width: 800px;height: 500px;"></div>  
+      <hr />
+      </div>
+      <div v-show="tab==3">
       <h2 class="mt-5">Disabled</h2>
-      <div id="twitter_dis" style="width: 700px;height: 400px;"></div> 
-      <div id="Aruin_ndia_number" style="width: 700px;height: 400px;"></div> 
-      <div id="Aruin_dss_payment" style="width: 700px;height: 400px;"></div> 
+      <p>Disabled Tweets</p>
+      <div id="twitter_dis" style="width: 800px;height: 500px;"></div> 
+      <p>Aurin Disabled Number</p>
+      <div id="Aruin_ndia_number" style="width: 800px;height: 500px;"></div> 
+      <p>Aurin Disabled Grant Received</p>
+      <div id="Aruin_dss_payment" style="width: 800px;height: 500px;"></div> 
       <hr />
-      <h2 class="mt-5">Financial level</h2>
-      <div id="twitter_income" style="width: 700px;height: 400px;"></div> 
-      <div id="abs_job" style="width: 700px;height: 400px;"></div> 
-      <hr />
-      <h2 class="mt-5">RAI & Rental</h2>
-      <div id="rai" style="width: 700px;height: 400px;"></div> 
-      <div id="rental" style="width: 700px;height: 400px;"></div> 
-      <div id="rant" style="width: 700px;height: 400px;"></div> 
-      <hr />
+      </div>
     </div>
   </div>
 </template>
@@ -29,13 +61,7 @@ export default {
   setup() {},
   data() {
     return {
-      vic: null,
-      nsw: null,
-      aurin: {
-        population: "population",
-        income: "income_2014",
-        obesity: "obesity_rate",
-      },
+      tab: 1,
     };
   },
   watch: {},
@@ -46,368 +72,215 @@ export default {
     this.fetch_suburb("suburb")
   },
   methods: {
+    tabChange(e){
+      let tabid = e.target.dataset.id
+      this.tab = tabid
+    },
     fetch_NewData(name) {
-      fetch(`http://127.0.0.1:5000/analysis/${name}`)// fetch(`${process.env.VUE_APP_BACKEND_BASE_URL}analysis/${state}`)
+      fetch(`http://127.0.0.1:5000/analysis/${name}`)
         .then(function (response) {
           return response.json();
         })
         .then((jsonData) => {
-            // console.log(jsonData);
             var data = jsonData["docs"]
-            console.log(data)
+            // Crime
             this.init_Multi_NewBarChart_Twitter_crime(data, "twitter_crime");
             this.init_Multi_NewBarChart_Aurin_crime(data, "Aruin_crime");
-            this.init_NewBarChart(data, "disabled", "twitter_dis", "Disabled Twitter 7 Days");
-            this.init_NewBarChart(data, "ndia_number", "Aruin_ndia_number", "Aurin Disabled Number");
-            this.init_NewBarChart(data, "dss_payment", "Aruin_dss_payment", "Aurin Disabled Grant Received");
-            this.init_NewBarChart(data, "income", "twitter_income", "Twitter 7 Days Income");
-            this.init_multi_BarChar(data,['Job', 'Income'],"abs_job");
+            this.init_7_9_crime(data,"7_news_9_news","7 News & 9 News");
+            this.init_emotion_chart(data,"Emotion");
+            this.init_daily_crime_melbourne(data, "Daily_crime_tweets_Melbourne")
+
+            // Income
             this.init_multi_lineChar_RAI(data, "rai");
-            this.init_NewBarChart(data, "unsw_rental", "rental", "Aurin Rental Number");
-            this.init_NewBarChart(data, "rant", "rant", "Twitter 7 Days Rent");
+            this.init_multi_BarChat_income_rant(data,"twitter_7_income_rant", "Twitter")
+            this.init_NewBarChart(data, "unsw_rental", "rental", "Aurin");
+            this.init_multi_BarChat_job_income(data,"Aurine_job_income", "Aurine")
+
+            // Disabled
+            this.init_Multi_BarChart_diabled_7_30(data,"twitter_dis", "Twitter");
+            this.init_NewBarChart(data, "ndia_number", "Aruin_ndia_number", "Aurin");
+            this.init_NewBarChart(data, "dss_payment", "Aruin_dss_payment", "Aurin");            
         });
     },
     fetch_suburb(name){
-      fetch(`http://127.0.0.1:5000/analysis/${name}`)// fetch(`${process.env.VUE_APP_BACKEND_BASE_URL}analysis/${state}`)
+      fetch(`http://127.0.0.1:5000/analysis/${name}`)
         .then(function (response) {
           return response.json();
         })
         .then((jsonData) => {
-          console.log("suburb",jsonData["docs"])
           var data = jsonData["docs"]
-          this.init_BarChart_suburb(data, "Suburb")
+          this.init_suburb_pie_char(data,"Suburb")
         });
     },
-    // bar chart 图
     init_NewBarChart(data, features, html_label, text_name){
-    // 基于准备好的dom，初始化echarts实例
       var myChart = echarts.init(document.getElementById(html_label));
-      console.log(data)
-    //   console.log(data["0"][features])
-      var data_list = [] //[483, 206, 916, 986]
-      var city_list = [] //['Melbourne', 'Sydney', 'Brisbane', 'Adelaide']
+
+      var data_list = [] 
+      var city_list = [] 
       var feature_list = [features]
 
       for(var key in data){
-        //   console.log(key)
-        //   console.log(data[key][features])
           var fea_num = data[key][features]
           var city = data[key]["city"]
           city_list.push(city)
           data_list.push(fea_num)
       }
-      console.log(city_list)
-    //   console.log(features)
-    //   console.log("+++++",feature_list)
-      // 指定图表的配置项和数据
+
       var option = {
         title: {
-          text: text_name   //'crime'
+          text: text_name   
         },
         tooltip: {},
         legend: {
-          data: feature_list //['crime']
+          data: feature_list 
         },
         xAxis: {
-          data: city_list//['Melbourne', 'Sydney', 'Brisbane', 'Adelaide']
+          data: city_list
         },
         yAxis: {},
         series: [
           {
-            name: features,  //['crime']
+            name: features,  
             type: 'bar',
             data: data_list
           },
         ]
       };
-
-      // 使用刚指定的配置项和数据显示图表。
       myChart.setOption(option);
     },
 
     init_population_all_NewBarChart(data, html_label){
-    // 基于准备好的dom，初始化echarts实例
       var myChart = echarts.init(document.getElementById(html_label));
-      console.log(data)
-    //   console.log(data["0"][features])
-      var population_list = [] //[483, 206, 916, 986]
-      var city_list = [] //['Melbourne', 'Sydney', 'Brisbane', 'Adelaide']
+
+      var population_list = []
+      var city_list = [] 
       var feature_list = ["Population"]
 
       for(var key in data){
-        //   console.log(key)
-        //   console.log(data[key][features])
+
           var fea_num = data[key]["abs_population"][1]
           var city = data[key]["city"]
           city_list.push(city)
           population_list.push(fea_num)
       }
-      console.log(city_list)
-    //   console.log(features)
-    //   console.log("+++++",feature_list)
-      // 指定图表的配置项和数据
+
       var option = {
         title: {
-          text: "Population"   //'crime'
+          text: "Population"   
         },
         tooltip: {},
         legend: {
-          data: feature_list //['crime']
+          data: feature_list 
         },
         xAxis: {
-          data: city_list//['Melbourne', 'Sydney', 'Brisbane', 'Adelaide']
+          data: city_list
         },
         yAxis: {},
         series: [
           {
-            name: ["Population"],  //['crime']
+            name: ["Population"], 
             type: 'bar',
             data: population_list
           },
         ]
       };
 
-      // 使用刚指定的配置项和数据显示图表。
       myChart.setOption(option);
     },
 
     init_population_density_NewBarChart(data, html_label){
-    // 基于准备好的dom，初始化echarts实例
       var myChart = echarts.init(document.getElementById(html_label));
-      console.log(data)
-    //   console.log(data["0"][features])
-      var population_density_list = [] //[483, 206, 916, 986]
-      var city_list = [] //['Melbourne', 'Sydney', 'Brisbane', 'Adelaide']
+
+      var population_density_list = []
+      var city_list = [] 
       var feature_list = ["Population Density"]
 
       for(var key in data){
-        //   console.log(key)
-        //   console.log(data[key][features])
           var fea_num = data[key]["abs_population"][2] / data[key]["abs_population"][0]
           var city = data[key]["city"]
           city_list.push(city)
           population_density_list.push(fea_num)
       }
-      console.log(city_list)
-    //   console.log(features)
-    //   console.log("+++++",feature_list)
-      // 指定图表的配置项和数据
+
       var option = {
         title: {
-          text: "Population Density"   //'crime'
+          text: "Population Density" 
         },
         tooltip: {},
         legend: {
-          data: feature_list //['crime']
+          data: feature_list 
         },
         xAxis: {
-          data: city_list//['Melbourne', 'Sydney', 'Brisbane', 'Adelaide']
+          data: city_list
         },
         yAxis: {},
         series: [
           {
-            name: ["Population Density"],  //['crime']
+            name: ["Population Density"],
             type: 'bar',
             data: population_density_list
           },
         ]
       };
 
-      // 使用刚指定的配置项和数据显示图表。
       myChart.setOption(option);
     },
-    // Job & Income & Unemployment Rate图
-    init_multi_BarChar(data, features, html_label){
-      var app = {};
+    init_multi_BarChat_income_rant(data, html_label, head_label){
       var chartDom = document.getElementById(html_label);
       var myChart = echarts.init(chartDom);
       var option;
 
-      const posList = [
-        'left',
-        'right',
-        'top',
-        'bottom',
-        'inside',
-        'insideTop',
-        'insideLeft',
-        'insideRight',
-        'insideBottom',
-        'insideTopLeft',
-        'insideTopRight',
-        'insideBottomLeft',
-        'insideBottomRight'
-      ];
-      app.configParameters = {
-        rotate: {
-          min: -90,
-          max: 90
-        },
-        align: {
-          options: {
-            left: 'left',
-            center: 'center',
-            right: 'right'
-          }
-        },
-        verticalAlign: {
-          options: {
-            top: 'top',
-            middle: 'middle',
-            bottom: 'bottom'
-          }
-        },
-        position: {
-          options: posList.reduce(function (map, pos) {
-            map[pos] = pos;
-            return map;
-          }, {})
-        },
-        distance: {
-          min: 0,
-          max: 100
-        }
-      };
-      app.config = {
-        rotate: 90,
-        align: 'left',
-        verticalAlign: 'middle',
-        position: 'insideBottom',
-        distance: 15,
-        onChange: function () {
-          const labelOption = {
-            rotate: app.config.rotate,
-            align: app.config.align,
-            verticalAlign: app.config.verticalAlign,
-            position: app.config.position,
-            distance: app.config.distance
-          };
-          myChart.setOption({
-            series: [
-              {
-                label: labelOption
-              },
-              {
-                label: labelOption
-              },
-              {
-                label: labelOption
-              },
-              {
-                label: labelOption
-              }
-            ]
-          });
-        }
-      };
-      const labelOption = {
-        show: true,
-        position: app.config.position,
-        distance: app.config.distance,
-        align: app.config.align,
-        verticalAlign: app.config.verticalAlign,
-        rotate: app.config.rotate,
-        formatter: '{c}  {name|{a}}',
-        fontSize: 16,
-        rich: {
-          name: {}
-        }
-      };
-      console.log(data)
-      console.log(data["0"][features])
-      var data_job_list = [] //[483, 206, 916, 986]
+      var data_rant_list = [] 
       var data_income_list = []
-      // var data_unemploy_list = []
-      var city_list = [] //['Melbourne', 'Sydney', 'Brisbane', 'Adelaide']
+      var city_list = []
 
       for(var key in data){
-          var job_area = data[key]["abs_job"][0]
-          // var unemply_area = data[key]["dese_unemploy"][0]
-          var each_job = data[key]["abs_job"][1] / job_area
-          var each_income = data[key]["abs_job"][2] / job_area
-          // var each_unemploy = data[key]["dese_unemploy"][1] / unemply_area
-          data_job_list.push(each_job)
+          var each_income = data[key]["income"]
+          var each_rant = data[key]["rant"]
+          data_rant_list.push(each_rant)
           data_income_list.push(each_income)
-          // data_unemploy_list.push(each_unemploy)
           var city = data[key]["city"]
           city_list.push(city)
       }
-      console.log(city_list)
-      console.log(data_job_list)
-      console.log(data_income_list)
-      // console.log(data_unemploy_list)
+
       option = {
         title: {
-          text: 'Aurin Working Conditions'
-        },
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-            type: 'shadow'
-          }
+          text: head_label 
         },
         legend: {
-          data: features //['Forest', 'Steppe', 'Desert', 'Wetland']
+          data: ["income","rant"]
         },
-        toolbox: {
-          show: true,
-          orient: 'vertical',
-          left: 'right',
-          top: 'center',
-          feature: {
-            mark: { show: true },
-            dataView: { show: true, readOnly: false },
-            magicType: { show: true, type: ['line', 'bar', 'stack'] },
-            restore: { show: true },
-            saveAsImage: { show: true }
-          }
+        xAxis: {
+          type: 'category',
+          data: city_list
         },
-        xAxis: [
-          {
-            type: 'category',
-            axisTick: { show: false },
-            data: city_list//['Melbourne', 'Sydney', 'Brisbane', 'Adelaide']//['2012', '2013', '2014', '2015', '2016']
-          }
-        ],
-        yAxis: [
-          {
-            type: 'value'
-          }
-        ],
+        yAxis: {
+          type: 'value'
+        },
         series: [
           {
-            name: 'Job',
+            data: data_rant_list,
+            name: "income",
             type: 'bar',
-            barGap: 0,
-            label: labelOption,
-            emphasis: {
-              focus: 'series'
-            },
-            data: data_job_list//[4033,4295,1018,2002]
+            showBackground: true,
+            backgroundStyle: {
+              color: 'rgba(180, 180, 180, 0.2)'
+            }
           },
           {
-            name: 'Income',
+            data: data_income_list,
+            name: "rant",
             type: 'bar',
-            label: labelOption,
-            emphasis: {
-              focus: 'series'
-            },
-            data: data_income_list//[103, 167, 15, 29]
-          },
-          // {
-          //   name: 'Unemployment Rate',
-          //   type: 'bar',
-          //   label: labelOption,
-          //   emphasis: {
-          //     focus: 'series'
-          //   },
-          //   data: data_unemploy_list//[242627, 449900, 112910, 256574]
-          // },
+            showBackground: true,
+            backgroundStyle: {
+              color: 'rgba(180, 180, 180, 0.2)'
+            }
+          }
         ]
       };
+
       option && myChart.setOption(option);
     },
-    // 折线图 RAI
     init_multi_lineChar_RAI(data, html_label){
       var chartDom = document.getElementById(html_label);
       var myChart = echarts.init(chartDom);
@@ -420,8 +293,6 @@ export default {
       var adela_list = []
 
       for(var key in data){
-        //   console.log(key)
-        //   console.log(data[key][features])
           var city = data[key]["city"]
           var num_area = data[key]["sgsep_rai"][0]
           var Q1 = data[key]["sgsep_rai"][1] / num_area
@@ -441,8 +312,6 @@ export default {
             bris_list = temp_list
           }
       }
-      console.log("mel",mel_list)
-      console.log("syd",syd_list)
       option = {
         title: {
           text: 'RAI'
@@ -451,7 +320,7 @@ export default {
           trigger: 'axis'
         },
         legend: {
-          data: city_list//['Melbourne', 'Sydney', 'Brisbane', 'Adelaide']//['Email', 'Union Ads', 'Video Ads', 'Direct', 'Search Engine']
+          data: city_list
         },
         grid: {
           left: '3%',
@@ -467,35 +336,35 @@ export default {
         xAxis: {
           type: 'category',
           boundaryGap: false,
-          data: ['First quarter', 'Second quarter', 'Third quarter', 'Fourth quarter']//['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+          data: ['First quarter', 'Second quarter', 'Third quarter', 'Fourth quarter']
         },
         yAxis: {
           type: 'value'
         },
         series: [
           {
-            name: "Melbourne", //'Email',
+            name: "Melbourne", 
             type: 'line',
             stack: 'Total1',
-            data: mel_list//[29500.09843, 30251.483189999995, 31593.623300000003, 31538.1573]//[120, 132, 101, 134, 90, 230, 210]
+            data: mel_list
           },
           {
-            name: 'Sydney',//'Union Ads',
+            name: 'Sydney',
             type: 'line',
             stack: 'Total2',
-            data: syd_list//[28021.130449999997, 30282.74901, 30436.63811, 30376.101889999998]//[220, 182, 191, 234, 290, 330, 310]
+            data: syd_list
           },
           {
-            name: 'Brisbane', //'Video Ads',
+            name: 'Brisbane',
             type: 'line',
             stack: 'Total3',
-            data: bris_list//[12787.2518, 13011.899139999998, 12707.13148, 12571.09375]//[150, 232, 201, 154, 190, 330, 410]
+            data: bris_list
           },
           {
-            name: 'Adelaide',   //'Direct',
+            name: 'Adelaide',
             type: 'line',
             stack: 'Total4',
-            data: adela_list//[19079.309610000004, 19472.908499999998, 19248.0069, 18806.99559]//[320, 332, 301, 334, 390, 330, 320]
+            data: adela_list
           },
         ]
       };
@@ -503,20 +372,13 @@ export default {
       option && myChart.setOption(option);
     },
 
-    // bar chart 图
     init_Multi_NewBarChart_Twitter_crime(data, html_label){
-    // 基于准备好的dom，初始化echarts实例
       var myChart = echarts.init(document.getElementById(html_label));
-      console.log(data)
-    //   console.log(data["0"][features])
-      var crime_7_list = [] //[483, 206, 916, 986]
+      var crime_7_list = []
       var crime_30_list = []
-      var city_list = [] //['Melbourne', 'Sydney', 'Brisbane', 'Adelaide']
-      // var feature_list = [features]
+      var city_list = [] 
       var features = "Twitter Crime"
       for(var key in data){
-        //   console.log(key)
-        //   console.log(data[key][features])
           var crime_7 = data[key]["crime"]
           var crime_30 = data[key]["crime_results_30days"]
           var city = data[key]["city"]
@@ -526,43 +388,40 @@ export default {
       }
       var option = {
         title: {
-          text: features   //'crime'
+          text: features   
         },
         tooltip: {},
         legend: {
-          data: ['7 days','30 days'] //['crime']
+          data: ['7 days','30 days'] 
         },
         xAxis: {
-          data: city_list//['Melbourne', 'Sydney', 'Brisbane', 'Adelaide']
+          data: city_list
         },
         yAxis: {},
         series: [
           {
-            name: '7 days',  //['crime']
+            name: '7 days',
             type: 'bar',
             data: crime_7_list
           },
           {
-            name: '30 days',  //['crime']
+            name: '30 days',
             type: 'bar',
             data: crime_30_list
           },
         ]
       };
 
-      // 使用刚指定的配置项和数据显示图表。
       myChart.setOption(option);
     },
 
     init_Multi_NewBarChart_Aurin_crime(data, html_label){
-      // 基于准备好的dom，初始化echarts实例
       var myChart = echarts.init(document.getElementById(html_label));
-    //   console.log(data["0"][features])
-      var population_all_list = [] //[483, 206, 916, 986]
+      var population_all_list = []
       var population_density_list = []
       var unemplyment = []
-      var city_list = [] //['Melbourne', 'Sydney', 'Brisbane', 'Adelaide']
-      var features = "Aurin crime"
+      var city_list = []
+      var features = "Aurin Crime"
 
       for(var key in data){
           var  num_area = data[key]["abs_population"][0]
@@ -577,85 +436,338 @@ export default {
       }
       var option = {
         title: {
-          text: features   //'crime'
+          text: features 
         },
         tooltip: {},
         legend: {
-          data: ['Population','Population Density', 'Unemployment Rate'] //['crime']
+          data: ['Population','Population Density', 'Unemployment Rate'] 
         },
         xAxis: {
-          data: city_list//['Melbourne', 'Sydney', 'Brisbane', 'Adelaide']
+          data: city_list
         },
         yAxis: {},
         series: [
           {
-            name: 'Population',  //['crime']
+            name: 'Population',  
             type: 'bar',
             data: population_all_list
           },
           {
-            name: 'Population Density',  //['crime']
+            name: 'Population Density',  
             type: 'bar',
             data: population_density_list
           },
           {
-            name: 'Unemployment Rate',  //['crime']
+            name: 'Unemployment Rate',  
             type: 'bar',
             data: unemplyment
           },
         ]
       };
 
-      // 使用刚指定的配置项和数据显示图表。
       myChart.setOption(option);
     },
-    
-    // suburb 图
-    init_BarChart_suburb(data, html_label){
-      // 基于准备好的dom，初始化echarts实例
+
+    init_7_9_crime(data, html_label, text_name){
       var myChart = echarts.init(document.getElementById(html_label));
-      //console.log(data["0"][features])
-      var crime_list = [] //[483, 206, 916, 986]
-      var city_list = [] //['Melbourne', 'Sydney', 'Brisbane', 'Adelaide']
-      var features = "Melbourne suburb data crime"
+      var seven_list = []
+      var nine_list = [] 
+      var city_list = []
+      var feature_list = ["7 news","9 news"]
 
       for(var key in data){
-          var crime = data[key]["crime_suburb"]
+          var seven  = data[key]["news_time_line_7news"]
+          var nine = data[key]["news_time_line_9news"]
           var city = data[key]["city"]
           city_list.push(city)
-          crime_list.push(crime)
+          nine_list.push(nine)
+          seven_list.push(seven)
       }
       var option = {
         title: {
-          text: features   //'crime'
+          text: text_name  
         },
         tooltip: {},
         legend: {
-          data: ['crime'] //['crime']
+          data: feature_list 
         },
         xAxis: {
-          data: city_list//['Melbourne', 'Sydney', 'Brisbane', 'Adelaide']
+          data: city_list
         },
         yAxis: {},
         series: [
           {
-            name: 'crime',  //['crime']
+            name: "7 news",  
             type: 'bar',
-            data: crime_list,
+            data: seven_list
+          },
+          {
+            name: "9 news", 
+            type: 'bar',
+            data: nine_list
           },
         ]
-      };
+      }
 
-      // 使用刚指定的配置项和数据显示图表。
       myChart.setOption(option);
     },
 
-  },
+    init_emotion_chart(data,html_label){
+      var chartDom = document.getElementById(html_label);
+      var myChart = echarts.init(chartDom);
+      var option;
+
+      var emotion_list = {}
+
+      for(var key in data){
+          var emotion  = data[key]["emotion"]
+          var city = data[key]["city"]
+          emotion_list[city] = emotion
+      }
+
+      option = {
+        title: {
+          text: 'Emotion Crime'
+        },
+        tooltip: {},
+        legend: {
+          data: ['Melbourne', 'Sydney', 'Brisbane', 'Adelaide']
+        },
+        radar: {
+          indicator: [
+            { name: 'Happy', max: 400},
+            { name: 'Angry', max: 400},
+            { name: 'Surprise', max: 400},
+            { name: 'Sad', max: 400},
+            { name: 'Fear', max: 400},
+          ]
+        },
+        series: [
+          {
+            name: 'Emotion Crime Tweets',
+            type: 'radar',
+            data: [
+              {
+                value: emotion_list['Melbourne'],
+                name: 'Melbourne'
+              },
+              {
+                value: emotion_list['Sydney'],
+                name: 'Sydney'
+              },
+              {
+                value: emotion_list['Brisbane'],
+                name: 'Brisbane'
+              },
+              {
+                value: emotion_list['Adelaide'],
+                name: 'Adelaide'
+              }
+            ]
+          }
+        ]
+      };
+
+      option && myChart.setOption(option);
+    },
+
+    // suburb
+    init_suburb_pie_char(data, html_label){
+      var chartDom = document.getElementById(html_label);
+      var myChart = echarts.init(chartDom);
+      var option;
+      
+    var crime_list = {} 
+
+      for(var key in data){
+          var crime = data[key]["crime_suburb"]
+          var city = data[key]["city"]
+          crime_list[city] = crime
+      }
+      option = {
+        title: {
+          text: 'Suburb',
+          subtext: 'Total Crime Relative Tweets In 2019',
+          left: 'center'
+        },
+        tooltip: {
+          trigger: 'item'
+        },
+        legend: {
+          orient: 'vertical',
+          left: 'left'
+        },
+        series: [
+          {
+            name: 'Access From',
+            type: 'pie',
+            radius: '50%',
+            data: [
+              { value: crime_list["Melbourne City"], name: 'Melbourne City' },
+              { value: crime_list["Richmond"], name: 'Richmond' },
+              { value: crime_list["South Melbourne"], name: 'South Melbourne' },
+            ],
+            emphasis: {
+              itemStyle: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: 'rgba(0, 0, 0, 0.5)'
+              }
+            }
+          }
+        ]
+      };
+
+      option && myChart.setOption(option);
+    },
+
+    init_multi_BarChat_job_income(data, html_label, head_label){
+      var chartDom = document.getElementById(html_label);
+      var myChart = echarts.init(chartDom);
+      var option;
+
+      var data_job_list = [] 
+      var data_income_list = []
+      var city_list = []
+
+      for(var key in data){
+          var job_area = data[key]["abs_job"][0]
+          var each_job = Math.round(data[key]["abs_job"][1] / job_area)
+          var each_income = Math.round(data[key]["abs_job"][2] / job_area)
+          data_job_list.push(each_job)
+          data_income_list.push(each_income)
+          var city = data[key]["city"]
+          city_list.push(city)
+      }
+
+      option = {
+        title: {
+          text: head_label  
+        },
+        legend: {
+          data: ["income","job"]
+        },
+        xAxis: {
+          type: 'category',
+          data: city_list
+        },
+        tooltip:{},
+        yAxis: {
+          type: 'value'
+        },
+        series: [
+          {
+            data: data_income_list,
+            name: "income",
+            type: 'bar',
+            showBackground: true,
+            backgroundStyle: {
+              color: 'rgba(180, 180, 180, 0.2)'
+            }
+          },
+          {
+            data: data_job_list,
+            name: "job",
+            type: 'bar',
+            showBackground: true,
+            backgroundStyle: {
+              color: 'rgba(180, 180, 180, 0.2)'
+            }
+          }
+        ]
+      };
+
+      option && myChart.setOption(option);
+    },
+
+    //  Daily crime
+    init_daily_crime_melbourne(data,html_label){
+      var chartDom = document.getElementById(html_label);
+      var myChart = echarts.init(chartDom);
+      var option;
+      var time_list = []
+      var crime_list = []
+      for (var each_time in data[0]["stream_time"]){
+        time_list.push(each_time)
+        crime_list.push(data[0]["stream_time"][each_time])
+      }
+      option = {
+        title: {
+          text: "Tweets"
+        },
+        tooltip: {},
+        xAxis: {
+          type: 'category',
+          data: time_list
+        },
+        yAxis: {
+          type: 'value'
+        },
+        series: [
+          {
+            data: crime_list, 
+            type: 'line'
+          }
+        ]
+      };
+
+      option && myChart.setOption(option);
+    },
+
+    init_Multi_BarChart_diabled_7_30(data, html_label, text_name){
+      var myChart = echarts.init(document.getElementById(html_label));
+
+      var disabled_7_list = [] 
+      var disabled_30_list = []
+      var city_list = [] 
+
+      for(var key in data){
+          var seven = data[key]["disabled"]
+          var thirty = data[key]["disabled_results_30days"]
+          var city = data[key]["city"]
+          city_list.push(city)
+          disabled_7_list.push(seven)
+          disabled_30_list.push(thirty)
+      }
+
+      var option = {
+        title: {
+          text: text_name  
+        },
+        tooltip: {},
+        legend: {
+          data: ["7 days", "30 days"]
+        },
+        xAxis: {
+          data: city_list
+        },
+        yAxis: {},
+        series: [
+          {
+            name: "7 days", 
+            type: 'bar',
+            data: disabled_7_list
+          },
+          {
+            name: "30 days",
+            type: 'bar',
+            data: disabled_30_list
+          },
+        ]
+      };
+      myChart.setOption(option);
+    },
+  }
 };
 </script>
 <style scoped>
 .bar_chart {
   width: 100%;
   height: 600px;
+}
+.center {
+    height: 2.666667rem;
+    width: 100%;
+    text-align: center;
 }
 </style>

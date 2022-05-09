@@ -1,34 +1,51 @@
-// Hanzhen Yang 1070951, 
-// Hanzhong Wang, 1029740,
-// Quan Zhou 1065302, 
-// Yuhang Xie 1089250, 
-// Ze Liu 1073628
+// Thanks COMP 90024 TEAM 68 Provide template Reference : https://github.com/CCC68/COMP90024_Project2, Hanzhen Yang 1070951, Hanzhong Wang, 1029740, Quan Zhou 1065302, Yuhang Xie 1089250, Ze Liu 1073628
+// Modoified By COMP90024 TEAM 45
+// Yingpei Ni 1252881
+// Yixue Jiang 1023137
+// Zirui Shan  1298781
+// Jinglin Li 1000797
+// Yuxiang Xie 1060196
 
 import { createStore } from 'vuex'
 
 export default createStore({
   state: {
     places: {
-      vic: {
-        n: 'vic',
-        name: 'Victoria',
-        placeField: 'vic_lga__3',
-        coords: { lat: -36.13615274670763, lng: 144.75151428066573 },
-        zoom: 7,
-        filename: 'map/vic'
-      }, 
-      nsw: {
-        n: 'nsw',
-        name: 'New South Wales',
+      Adelaide: {
+        n: 'Adelaide',
+        name: 'Adelaide',
         placeField: 'nsw_lga__3',
-        coords: { lat: -32.17623298515995, lng: 146.70449300679843 },
-        zoom: 6,
-        filename: 'map/nsw'
+        coords: { lat: -34.9286212, lng: 138.5999594 },
+        zoom: 7, 
+        filename: 'Adelaide'
+      },
+      Brisbane: {
+        n: 'Brisbane',
+        name: 'Brisbane',
+        placeField: 'nsw_lga__3',
+        coords: { lat: -27.467778, lng: 153.027778 },
+        zoom: 7,
+        filename: 'Brisbane'
+      },
+      Melbourne: {
+        n: 'Melbourne',
+        name: 'Melbourne',
+        placeField: 'nsw_lga__3',
+        coords: { lat: -37.8136, lng: 144.963 },
+        zoom: 7,
+        filename: 'Melbourne'
+      },
+      Sydney: {
+        n: 'Sydney',
+        name: 'Sydney',
+        placeField: 'NSW_LGA__3',
+        coords: { lat: -33.859972, lng: 151.211111 },
+        zoom: 7,
+        filename: 'Sydney'
       }
     },
-    scenarios: ['Bitcoin', 'Exercise', 'Traffic'],
-    aurins: ['Population', 'Income', 'Obesity'],
-    income_color: ['#053061', '#1b5a9b', '#337eb8', '#5ba2cb', '#97c7df', '#c7e0ed', '#e8f0f4', '#f9ece5', '#fcd3bc', '#f5a987', '#df755d', '#c53f3d', '#a11228', '#67001f'],
+    scenarios: ['Crime', 'Income', 'Disabled'], 
+    aurins: ['Crime', 'Income', 'Disabled'], 
     silver_map: [
       {
         "elementType": "geometry",
@@ -99,7 +116,7 @@ export default createStore({
       {
         "featureType": "poi",
         "elementType": "labels.text.fill",
-        "stylers": [
+        "stylers": [ 
           {
             "color": "#757575"
           }
