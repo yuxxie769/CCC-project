@@ -8,7 +8,7 @@ RUN pip install flask_cors
 
 WORKDIR /apps/backend
 
-EXPOSE 4500
+EXPOSE 5000
 
-# CMD ["flask","run","-p","4500"]
+CMD ["flask","run"]
 

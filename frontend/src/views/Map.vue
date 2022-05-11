@@ -157,16 +157,16 @@ export default {
       let income_twitter = event.feature.getProperty("income");
       let crime_twitter = event.feature.getProperty("crime");
       let disabled_twitter = event.feature.getProperty("disabled");
-      let income_aurine = event.feature.getProperty("abs_job")[2];
-      let crime_aurine = event.feature.getProperty("dese_unemploy")[1];
+      let income_aurine = Math.floor(event.feature.getProperty("abs_job")[2]/event.feature.getProperty("abs_job")[0]*1000)/1000;
+      let crime_aurine = Math.floor(event.feature.getProperty("dese_unemploy")[1]/event.feature.getProperty("dese_unemploy")[0]*1000)/1000;
       let disabled_aurine = event.feature.getProperty("ndia_number");
 
-      let income_twitter_html = `<h6> Income twitter: ${income_twitter}</h6>`;
-      let crime_twitter_html = `<h6> Crime twitter: ${crime_twitter}</h6>`;
-      let disabled_twitter_html = `<h6> Disabled twitter: ${disabled_twitter}</h6>`;
-      let income_aurine_html = `<h6> Income_aurine: ${income_aurine}</h6>`;
-      let crime_aurine_html = `<h6> Crime aurine: ${crime_aurine}</h6>`;
-      let disabled_aurine_html = `<h6> Disabled aurine: ${disabled_aurine}</h6>`;
+      let income_twitter_html = `<h6> Income relate twitter: ${income_twitter}</h6>`;
+      let crime_twitter_html = `<h6> Crime relate twitter: ${crime_twitter}</h6>`;
+      let disabled_twitter_html = `<h6> Disabled relate twitter: ${disabled_twitter}</h6>`;
+      let income_aurine_html = `<h6> Income median: ${income_aurine}</h6>`;
+      let crime_aurine_html = `<h6> Unemployment rate: ${crime_aurine}</h6>`;
+      let disabled_aurine_html = `<h6> Registered diabled people: ${disabled_aurine}</h6>`;
       let pic_adelaide = '<img src="https://res.klook.com/image/upload/Mobile/City/zb5xnlar4ifecn8cp4h2.jpg" width="350" height="250">';
       let pic_melbourne = '<img src="https://cdn.britannica.com/64/190464-050-B74E1FD9/view-central-business-district-Melbourne-train-station.jpg" width="350" height="250">';
       let pic_sydney = '<img src="https://cms.finnair.com/resource/blob/673152/3523a759b61b788b834fe56aa57fa255/sydney-main-data.jpg" width="350" height="250">';

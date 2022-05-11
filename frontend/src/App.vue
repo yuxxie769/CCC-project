@@ -46,7 +46,7 @@ export default {
   position: relative;
   z-index: 1000;
   backdrop-filter: blur(5px);
-  background: #21252980;
+  background: #4682B4;
 }
 .view {
   position: absolute;

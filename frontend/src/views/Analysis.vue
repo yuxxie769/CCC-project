@@ -10,9 +10,9 @@ Yuxiang Xie 1060196 -->
     <div class="container">
       <div class="center">
       <h4 class="mt-5">Character Selection</h4>      
-      <button @click="tabChange" data-id="1">Crime</button>
-      <button @click="tabChange" data-id="2">Income</button>
-      <button @click="tabChange" data-id="3">Disabled</button>
+      <button class="buttom" @click="tabChange" data-id="1">Crime</button>
+      <button class="buttom" @click="tabChange" data-id="2">Income</button>
+      <button class="buttom" @click="tabChange" data-id="3">Disabled</button>
       </div>
       <div v-show="tab==1">
       <h2 class="mt-5">Crime</h2>
@@ -20,13 +20,13 @@ Yuxiang Xie 1060196 -->
       <div id="twitter_crime" style="width: 800px;height: 500px;"></div> 
       <p>Aurin Population & Unemployment Data</p>
       <div id="Aruin_crime" style="width: 800px;height: 500px;"></div> 
-      <p>Tweets With Crime Relate Key Words</p> 
+      <p>Media Tweets With Crime Relate Key Words</p> 
       <div id="7_news_9_news" style="width: 800px;height: 500px;"></div> 
-      <p>Emotion In Crime Related Tweets</p>
+      <p>Emotion In 7 days Crime Related Tweets</p>
       <div id="Emotion" style="width: 800px;height: 500px;"></div>
       <p>Daily Crime Relate Tweets In Melbourne</p>
       <div id="Daily_crime_tweets_Melbourne" style="width: 800px;height: 500px;"></div> 
-      <p>Total Crime Relate Tweets In 2019</p>
+      <p>Total Crime Relate Tweets of 3 Suburbs In 2019</p>
       <div id="Suburb" style="width: 800px;height: 500px;"></div> 
       <hr />
       </div>
@@ -92,14 +92,14 @@ export default {
 
             // Income
             this.init_multi_lineChar_RAI(data, "rai");
-            this.init_multi_BarChat_income_rant(data,"twitter_7_income_rant", "Twitter")
-            this.init_NewBarChart(data, "unsw_rental", "rental", "Aurin");
-            this.init_multi_BarChat_job_income(data,"Aurine_job_income", "Aurine")
+            this.init_multi_BarChat_income_rant(data,"twitter_7_income_rant", "Twitter Income")
+            this.init_NewBarChart(data, "unsw_rental", "rental", "Aurin Rental");
+            this.init_multi_BarChat_job_income(data,"Aurine_job_income", "Aurine Job")
 
             // Disabled
-            this.init_Multi_BarChart_diabled_7_30(data,"twitter_dis", "Twitter");
-            this.init_NewBarChart(data, "ndia_number", "Aruin_ndia_number", "Aurin");
-            this.init_NewBarChart(data, "dss_payment", "Aruin_dss_payment", "Aurin");            
+            this.init_Multi_BarChart_diabled_7_30(data,"twitter_dis", "Twitter Disabled");
+            this.init_NewBarChart(data, "ndia_number", "Aruin_ndia_number", "Aurin NDIA member");
+            this.init_NewBarChart(data, "dss_payment", "Aruin_dss_payment", "Aurin Disability benefit");            
         });
     },
     fetch_suburb(name){
@@ -196,7 +196,7 @@ export default {
       var feature_list = ["Population Density"]
 
       for(var key in data){
-          var fea_num = data[key]["abs_population"][2] / data[key]["abs_population"][0]
+          var fea_num = Math.floor(data[key]["abs_population"][2] / data[key]["abs_population"][0]*1000)/1000
           var city = data[key]["city"]
           city_list.push(city)
           population_density_list.push(fea_num)
@@ -247,6 +247,7 @@ export default {
         title: {
           text: head_label 
         },
+        tooltip: {},
         legend: {
           data: ["income","rant"]
         },
@@ -295,10 +296,10 @@ export default {
       for(var key in data){
           var city = data[key]["city"]
           var num_area = data[key]["sgsep_rai"][0]
-          var Q1 = data[key]["sgsep_rai"][1] / num_area
-          var Q2 = data[key]["sgsep_rai"][2] / num_area
-          var Q3 = data[key]["sgsep_rai"][3] / num_area
-          var Q4 = data[key]["sgsep_rai"][4] / num_area
+          var Q1 = Math.floor(data[key]["sgsep_rai"][1] / num_area*1000)/1000
+          var Q2 = Math.floor(data[key]["sgsep_rai"][2] / num_area*1000)/1000
+          var Q3 = Math.floor(data[key]["sgsep_rai"][3] / num_area*1000)/1000
+          var Q4 = Math.floor(data[key]["sgsep_rai"][4] / num_area*1000)/1000
           var temp_list = [Q1, Q2, Q3, Q4]
 
           city_list.push(city)
@@ -392,7 +393,7 @@ export default {
         },
         tooltip: {},
         legend: {
-          data: ['7 days','30 days'] 
+          data: ['in 7 days','in 30 days'] 
         },
         xAxis: {
           data: city_list
@@ -400,12 +401,12 @@ export default {
         yAxis: {},
         series: [
           {
-            name: '7 days',
+            name: 'in 7 days',
             type: 'bar',
             data: crime_7_list
           },
           {
-            name: '30 days',
+            name: 'in 30 days',
             type: 'bar',
             data: crime_30_list
           },
@@ -426,8 +427,8 @@ export default {
       for(var key in data){
           var  num_area = data[key]["abs_population"][0]
           var population_all = data[key]["abs_population"][1]
-          var population_density = data[key]["abs_population"][2] / num_area
-          var unemplyment_each = data[key]["dese_unemploy"][1] / data[key]["dese_unemploy"][0]
+          var population_density = Math.floor(data[key]["abs_population"][2] / num_area*1000)/1000
+          var unemplyment_each = Math.floor(data[key]["dese_unemploy"][1] / data[key]["dese_unemploy"][0]*1000)/1000
           var city = data[key]["city"]
           city_list.push(city)
           population_all_list.push(population_all)
@@ -440,6 +441,8 @@ export default {
         },
         tooltip: {},
         legend: {
+          selected:{'Population':true,'Population Density':false,'Unemployment Rate':false},
+          selectedMode:'single',
           data: ['Population','Population Density', 'Unemployment Rate'] 
         },
         xAxis: {
@@ -587,7 +590,7 @@ export default {
       option = {
         title: {
           text: 'Suburb',
-          subtext: 'Total Crime Relative Tweets In 2019',
+          subtext: 'Total Crime Relative Tweets of 3 Suburbs In 2019',
           left: 'center'
         },
         tooltip: {
@@ -645,7 +648,8 @@ export default {
           text: head_label  
         },
         legend: {
-          data: ["income","job"]
+          selectedMode:'single',
+          data: ["median income","job types"]
         },
         xAxis: {
           type: 'category',
@@ -658,7 +662,7 @@ export default {
         series: [
           {
             data: data_income_list,
-            name: "income",
+            name: "median income",
             type: 'bar',
             showBackground: true,
             backgroundStyle: {
@@ -667,7 +671,7 @@ export default {
           },
           {
             data: data_job_list,
-            name: "job",
+            name: "job types",
             type: 'bar',
             showBackground: true,
             backgroundStyle: {
@@ -736,7 +740,7 @@ export default {
         },
         tooltip: {},
         legend: {
-          data: ["7 days", "30 days"]
+          data: ["in 7 days", "in 30 days"]
         },
         xAxis: {
           data: city_list
@@ -744,12 +748,12 @@ export default {
         yAxis: {},
         series: [
           {
-            name: "7 days", 
+            name: "in 7 days", 
             type: 'bar',
             data: disabled_7_list
           },
           {
-            name: "30 days",
+            name: "in 30 days",
             type: 'bar',
             data: disabled_30_list
           },
@@ -770,4 +774,23 @@ export default {
     width: 100%;
     text-align: center;
 }
+.buttom {
+ font-size: 0.9em;
+
+ background: #DCDCDC;
+ outline: none;
+ border: none;
+ cursor: pointer;
+ padding: 10px 20px;
+ margin: 10px 10px;
+ border-radius:15px;
+ -webkit-appearance: none;
+}
+ 
+.buttom:hover {
+ background: #808080;
+ transition: 0.5s all ease;
+
+}
+
 </style>
