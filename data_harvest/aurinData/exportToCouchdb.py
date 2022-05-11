@@ -105,7 +105,7 @@ for index,dbname in enumerate(dbNames):
     #    print(db[id])
         cityCaps = ['A','B','S','M']
         for cap in cityCaps:
-            with open('C:/Users/xt/Documents/GitHub/CCC-project/data_harvest/aurinData/'+foderNames[index]+'/'+cap+'_convert.json','r',encoding='utf-8') as f:
+            with open(foderNames[index]+'/'+cap+'_convert.json','r',encoding='utf-8') as f:
                 dic = json.load(f)
                 #print(dic)
                 documents = db.update(dic['docs'])
