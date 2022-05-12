@@ -163,28 +163,28 @@ suburb.append(sub_rich)
 suburb.append(sub_south)
 print(final_V_2)
 print(suburb)
-with open('analysis_data.json', 'w', encoding='utf-8') as f:
+with open('../temp_data/analysis_data.json', 'w', encoding='utf-8') as f:
     f.write(json.dumps({'new_edits': False, 'docs': final_V_2}))
-with open('analysis_suburb.json', 'w', encoding='utf-8') as f:
+with open('../temp_data/analysis_suburb.json', 'w', encoding='utf-8') as f:
     f.write(json.dumps({'new_edits': False, 'docs': suburb}))
 
 city_list=["Adelaide","Brisbane","Melbourne","Sydney"]
 info_list=['abs_job','abs_population', 'dese_unemploy', 'dss_payment', 'ndia_number',
            'sgsep_rai', 'unsw_rental', 'crime', 'disabled', 'income', 'rant', 'crime_results_30days',
            'disabled_results_30days']
-with open("analysis_data.json") as f1:
+with open("../temp_data/analysis_data.json") as f1:
     info = f1.read()
 infos=json.loads(info)
 print(infos["docs"][0]["city"])
 for i in range(len(city_list)):
-    with open(city_list[i]+'.json') as f:
+    with open("../temp_data/"+city_list[i]+'.json') as f:
         result=f.read()
     results=json.loads(result)
     for j in range(len(city_list)):
         if infos["docs"][j]["city"] == city_list[i] :
             for k in info_list:
                 results["features"][0]["properties"][k] = infos["docs"][j][k]
-    with open(city_list[i]+'.json', "w") as f2:
+    with open("../temp_data/"+city_list[i]+'.json', "w") as f2:
         f2.write(json.dumps(results))
     f2.close
 
