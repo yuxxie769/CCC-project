@@ -20,7 +20,7 @@ Yuxiang Xie 1060196 -->
                 <li>JingLin Li  1000797</li>
                 <li>Yingpei Ni  1252881</li>
                 <li>Zirui Shan  1298781</li>
-                <li>Yuhang Xie  1060196</li>
+                <li>Yuxiang Xie  1060196</li>
                 <li>(Sort alphabetically by family name.)</li>
             </ul>
 
