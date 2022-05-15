@@ -144,6 +144,7 @@ def dataclean():
             elif row.key == "Brisbane":
                 bri["emotion"] = list_new
 
+    mel["stream_time"]={"2022-05-04": 147, "2022-05-05": 79, "2022-05-06": 59, "2022-05-07": 66, "2022-05-08": 38, "2022-05-09": 48, "2022-05-10": 16, "2022-05-11": 27}
     stream_time={}
     try:
         db = couch['stream_crime_mel']
@@ -155,9 +156,8 @@ def dataclean():
          results = db.view('city/city-view', reduce=True, group_level=1)
          for row in results:
              stream_time[row.key] = row.value
-         mel["stream_time"]=stream_time
+         mel["stream_time"].update(stream_time)
 
-    mel["stream_time"]={"2022-05-03": 3, "2022-05-04": 147, "2022-05-05": 79, "2022-05-06": 59, "2022-05-07": 66, "2022-05-08": 38, "2022-05-09": 48, "2022-05-10": 16, "2022-05-11": 27}
 
     final_V_2.append(mel)
     final_V_2.append(syd)
