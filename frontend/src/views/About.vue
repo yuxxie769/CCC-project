@@ -16,12 +16,12 @@ Yuxiang Xie 1060196 -->
             <p>Contributors: </p>
 
             <ul class="mt-3">
-                <li>YiXue Jiang 1023137</li>
-                <li>JingLin Li  1000797</li>
+                <li>Yixue Jiang 1023137</li>
+                <li>Jinglin Li  1000797</li>
                 <li>Yingpei Ni  1252881</li>
                 <li>Zirui Shan  1298781</li>
-                <li>Yuhang Xie  1060196</li>
-                <li>(Sort alphabetically by family name.)</li>
+                <li>Yuxiang Xie  1060196</li>
+                <p>(Sort alphabetically by family name.)</p>
             </ul>
 
             <p>All rights reserved.</p>
