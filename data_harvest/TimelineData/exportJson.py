@@ -1,7 +1,8 @@
 import couchdb
 import json
 
-
+#This program is for pushing Twitter data into the couchdb
+#login couchdb
 masternode='172.26.130.224'
 user='Yingpei'
 passeord='030988'
@@ -9,12 +10,11 @@ passeord='030988'
 url = 'http://'+user+':'+passeord+'@'+masternode+':5984/'
 
 
-#res=requests.post(url=url+'newtest/_bulk_docs',data = '@./crime_results.json'
-#,headers=header)
-#print(res)
 couch = couchdb.Server(url)
+#Every dataset has an unique database
 fileNames= ['crime_suburb.json','disabled_results_30days.json','crime_results_30days.json','NewsTimeLine.json','crime_results.json','disabled_results.json','income_results.json','rant_results.json']
 dbNames = ['crime_suburb','disabled_results_30days','crime_results_30days','newstimeline','crime','disabled','income','rant']
+#Veiw documents for each databases
 design_docs=[{  '_id': '_design/city',
                 'views': {
                     'city-view': {
@@ -84,6 +84,7 @@ design_docs=[{  '_id': '_design/city',
                 }
             },
 ]
+#Create databases and push data and view.
 for index,dbname in enumerate(dbNames):
     try:
         db = couch[dbname]
