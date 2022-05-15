@@ -2,26 +2,19 @@ import couchdb
 import json
 import requests
 
-
+#This program is for pushing aurin data into the couchdb
+#login couchdb
 masternode='172.26.130.224'
 user='Yingpei'
 passeord='030988'
-#files = {'file':open('crime_results.json','rb')}
-#header = {'Content-Type': 'application/json'}
-#data = json.dumps({
-#"docs":[
-#	{"doc1":"sth","aaaa":"123"},
-#	{"doc2":"moremore","bbbb":"456"}
-#]})
+
 url = 'http://'+user+':'+passeord+'@'+masternode+':5984/'
-
-
-#res=requests.post(url=url+'newtest/_bulk_docs',data = '@./crime_results.json'
-#,headers=header)
-#print(res)
 couch = couchdb.Server(url)
+
+#every dataset has an unique database
 foderNames= ['ABS_job','ABS_population','DESE_unemploy','DSS_payment','NDIA_number','SGSEP_rai','UNSW_rental']
 dbNames = ['abs_job','abs_population','dese_unemploy','dss_payment','ndia_number','sgsep_rai','unsw_rental']
+#veiw documents for each databases
 design_docs = [
     {  '_id': '_design/city',
                         'views': {
@@ -80,6 +73,7 @@ design_docs = [
                         }
     }
 ]
+#create databases and push data and view.
 for index,dbname in enumerate(dbNames):
     try:
         db = couch[dbname]
@@ -91,18 +85,6 @@ for index,dbname in enumerate(dbNames):
         db = couch[dbname]
         print('no such db, created one')
     finally:
-
-    #output=couch.replicate(url+"newtest",url+"newrep",continuous=True)
-    #db = couch['newtest']
-    #results=db.view('try/city-view',reduce=True,group_level=1)
-
-    #outputdict={}
-    #for row in results:
-    #	outputdict[row.key]=row.value
-    #print(outputdict)
-
-    #for id in db:
-    #    print(db[id])
         cityCaps = ['A','B','S','M']
         for cap in cityCaps:
             with open(foderNames[index]+'/'+cap+'_convert.json','r',encoding='utf-8') as f:
@@ -112,5 +94,3 @@ for index,dbname in enumerate(dbNames):
         resp = db.save(design_docs[index])
         print(resp)        
     print(dbname +'export finished!')
-    #output=couch.delete('rant')
-    #print(output)
