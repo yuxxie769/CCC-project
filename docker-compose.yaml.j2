@@ -10,7 +10,7 @@ services:
             COUCHDB_HOST: {{ COUCHDB_HOST }}
         ports:
             - {{ APP_SERVER_PORT }}:{{ APP_SERVER_PORT }}
-        command: flask run --host=0.0.0.0
+        command: sh start.sh
 
     frontend:
         build: ./frontend
