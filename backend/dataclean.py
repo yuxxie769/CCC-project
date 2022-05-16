@@ -15,8 +15,7 @@ dbNames = ['abs_job','abs_population','dese_unemploy','dss_payment',
            'disabled','income','newstimeline','rant',
            'crime_results_30days','disabled_results_30days']
 
-final_V_2=[]
-suburb=[]
+
 mel={"city":"Melbourne",'cordinate':[[141.1,-38],[147,-38],[147,-37.5],[141.1,-37.5]]}
 syd={"city":"Sydney",'cordinate':[[146,-36],[152,-36],[152,-33],[146,-33]]}
 ade={"city":"Adelaide",'cordinate':[[138,-35],[138,-38],[141.1,-35],[141.1,-38]]}
@@ -26,6 +25,8 @@ sub_rich={"city":"Richmond"}
 sub_south={"city":"South Melbourne"}
 
 def dataclean():
+    final_V_2=[]
+    suburb=[]
     for i in dbNames:
         try:
             db = couch[i]
@@ -168,8 +169,10 @@ def dataclean():
     suburb.append(sub_south)
     with open('../temp_data/analysis_data.json', 'w', encoding='utf-8') as f:
         f.write(json.dumps({'new_edits': False, 'docs': final_V_2}))
+    f.close
     with open('../temp_data/analysis_suburb.json', 'w', encoding='utf-8') as f:
         f.write(json.dumps({'new_edits': False, 'docs': suburb}))
+    f.close
 
     city_list=["Adelaide","Brisbane","Melbourne","Sydney"]
     info_list=['abs_job','abs_population', 'dese_unemploy', 'dss_payment', 'ndia_number',
@@ -177,6 +180,7 @@ def dataclean():
             'disabled_results_30days']
     with open("../temp_data/analysis_data.json") as f1:
         info = f1.read()
+    f1.close
     infos=json.loads(info)
     for i in range(len(city_list)):
         with open("../temp_data/"+city_list[i]+'.json') as f:
@@ -197,7 +201,7 @@ def restart():
         start_time = time.time()
         while w == 1:           
             wait_time = time.time() - start_time
-            if wait_time > 90:
+            if wait_time > 10:
                 dataclean()
                 start_time = time.time()
     except KeyboardInterrupt:
