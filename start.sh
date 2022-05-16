@@ -1,1 +1,2 @@
-nohup python backend/dataclean.py && flask run --host=0.0.0.0
+nohup python backend/dataclean.py &
+flask run --host=0.0.0.0
